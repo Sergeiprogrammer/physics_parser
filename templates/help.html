@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Score Guide</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --shadow: 0 8px 24px rgba(0,0,0,0.08);
+      --red-bg: #fef2f2;
+      --red-border: #fecaca;
+      --red-text: #991b1b;
+      --green-bg: #ecfdf5;
+      --green-border: #a7f3d0;
+      --green-text: #065f46;
+      --blue-bg: #eff6ff;
+      --blue-border: #bfdbfe;
+      --blue-text: #1e3a8a;
+      --accent: #2563eb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 90px 20px 40px;
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .top-menu {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: white;
+      padding: 10px 16px;
+      border-radius: 12px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.15);
+      z-index: 9999;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .menu-link {
+      text-decoration: none;
+      color: var(--accent);
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 8px;
+      transition: 0.2s ease;
+    }
+
+    .menu-link:hover {
+      background: #eff6ff;
+    }
+
+    .menu-link.active {
+      background: var(--accent);
+      color: white;
+    }
+
+    .hero,
+    .card {
+      background: var(--card);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    .hero {
+      padding: 28px;
+      margin-bottom: 22px;
+    }
+
+    .card {
+      padding: 22px;
+    }
+
+    h1, h2, h3 {
+      margin-top: 0;
+      line-height: 1.25;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin-bottom: 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .red {
+      background: var(--red-bg);
+      color: var(--red-text);
+      border: 1px solid var(--red-border);
+    }
+
+    .green {
+      background: var(--green-bg);
+      color: var(--green-text);
+      border: 1px solid var(--green-border);
+    }
+
+    .blue {
+      background: var(--blue-bg);
+      color: var(--blue-text);
+      border: 1px solid var(--blue-border);
+    }
+
+    .section {
+      margin-top: 22px;
+    }
+
+    ul {
+      margin: 10px 0 0;
+      padding-left: 20px;
+    }
+
+    li + li {
+      margin-top: 6px;
+    }
+
+    .formula {
+      background: #f9fafb;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-family: Consolas, monospace;
+      overflow-x: auto;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f9fafb;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .footer-note {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 120px 14px 30px;
+      }
+
+      .top-menu {
+        left: 12px;
+        right: 12px;
+        top: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-menu">
+    <a href="/" class="menu-link">Analyzer</a>
+    <a href="/help" class="menu-link active">Score Guide</a>
+  </div>
+
+  <div class="container">
+    <section class="hero">
+      <h1>Score Guide</h1>
+      <p class="lead">
+        This page explains what <strong>Anomaly Score</strong>, <strong>Manual Score</strong>, and <strong>Contrast Score</strong>
+        mean in the event analysis tool, and how to interpret them together.
+      </p>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <span class="pill red">Anomaly Score</span>
+        <h2>How unusual is the event?</h2>
+        <p>
+          Anomaly Score measures how far an event stands out from more typical events.
+          It rewards extreme or rare-looking values.
+        </p>
+      </article>
+
+      <article class="card">
+        <span class="pill green">Manual Score</span>
+        <h2>How clean and plausible is the event?</h2>
+        <p>
+          Manual Score imitates a more human-style evaluation. It prefers events that look
+          physically cleaner and more reasonable.
+        </p>
+      </article>
+
+      <article class="card">
+        <span class="pill blue">Contrast Score</span>
+        <h2>How interesting is the event?</h2>
+        <p>
+          Contrast Score looks for events with a strong signal but not too much clutter.
+          It is especially useful for finding compact yet striking events.
+        </p>
+      </article>
+    </section>
+
+    <section class="card section">
+      <span class="pill red">Anomaly Score</span>
+      <h2>1. Anomaly Score</h2>
+      <p>
+        <strong>Main idea:</strong> detect events with extreme or unusual values.
+      </p>
+      <h3>What it uses</h3>
+      <ul>
+        <li>Very low or very high number of tracks</li>
+        <li>Very high maximum track transverse momentum (<code>max_track_pt</code>)</li>
+        <li>Very high total track transverse momentum (<code>sum_track_pt</code>)</li>
+        <li>High missing transverse energy (MET, stored as <code>etmis</code>)</li>
+        <li>Strong leading jet energy and a high number of jets</li>
+      </ul>
+      <h3>How to interpret it</h3>
+      <p>
+        A higher <strong>Anomaly Score</strong> means the event is more extreme and more likely to stand out.
+        It does <em>not</em> automatically mean the event is clean or physically convincing. It simply means
+        it looks unusual.
+      </p>
+    </section>
+
+    <section class="card section">
+      <span class="pill green">Manual Score</span>
+      <h2>2. Manual Score</h2>
+      <p>
+        <strong>Main idea:</strong> imitate a hand-tuned, human-style quality check.
+      </p>
+      <h3>What it uses</h3>
+      <ul>
+        <li>Track count</li>
+        <li>Presence of both positive and negative tracks</li>
+        <li>Charge balance between positive and negative tracks</li>
+        <li>Maximum track momentum and total track momentum</li>
+        <li>Primary vertex position and vertex track ratio</li>
+        <li>MET level</li>
+        <li>Jet count and leading jet energy</li>
+      </ul>
+      <h3>How to interpret it</h3>
+      <p>
+        A higher <strong>Manual Score</strong> usually means the event looks cleaner, more balanced,
+        and more physically reasonable according to the rule-based logic in the analyzer.
+      </p>
+      <p>
+        This score is useful when you want events that are easier to inspect and less likely to be pure noise.
+      </p>
+    </section>
+
+    <section class="card section">
+      <span class="pill blue">Contrast Score</span>
+      <h2>3. Contrast Score</h2>
+      <p>
+        <strong>Main idea:</strong> find events with strong signal features but not too much activity around them.
+      </p>
+      <h3>Core formula</h3>
+      <div class="formula">contrast_score = scarcity × signal_strength × 10 − noise_penalty</div>
+
+      <h3>Its parts</h3>
+      <ul>
+        <li><strong>Scarcity:</strong> fewer tracks give a larger value</li>
+        <li><strong>Signal strength:</strong> built from MET, leading jet energy, and maximum track momentum</li>
+        <li><strong>Noise penalty:</strong> subtracts points for too many tracks, too many jets, or too much total activity</li>
+      </ul>
+
+      <h3>How to interpret it</h3>
+      <p>
+        A higher <strong>Contrast Score</strong> means the event is compact but still contains a noticeable signal.
+        In practice, this often makes it one of the most useful scores for browsing and ranking interesting events.
+      </p>
+    </section>
+
+    <section class="card section">
+      <h2>How to use the scores together</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Goal</th>
+              <th>Best score to check first</th>
+              <th>Why</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Find rare or extreme events</td>
+              <td><strong>Anomaly Score</strong></td>
+              <td>It highlights strong deviations and outliers.</td>
+            </tr>
+            <tr>
+              <td>Find clean and physically reasonable events</td>
+              <td><strong>Manual Score</strong></td>
+              <td>It favors balance, cleaner geometry, and more plausible structure.</td>
+            </tr>
+            <tr>
+              <td>Find the most interesting candidates quickly</td>
+              <td><strong>Contrast Score</strong></td>
+              <td>It prefers strong signals without too much clutter.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="footer-note">
+        A practical workflow is to sort by <strong>Contrast Score</strong> first, then inspect
+        <strong>Anomaly Score</strong> and <strong>Manual Score</strong> to decide whether the event is both unusual and worth a closer look.
+      </p>
+    </section>
+
+    <section class="card section">
+      <h2>Short summary</h2>
+      <ul>
+        <li><strong>Anomaly Score</strong> = how much the event stands out</li>
+        <li><strong>Manual Score</strong> = how clean and plausible the event looks</li>
+        <li><strong>Contrast Score</strong> = how interesting the event is for inspection</li>
+      </ul>
+    </section>
+
+    <section class="card section">
+      <h2>API</h2>
+      <ul>
+        <a href="/api/analyze" class="menu-link active">API</a>
+        <strong>At this adress you can send and get raw data that you can use for your projects</strong>
+        <strong>you have api example code in directory:api of this programm</strong>
+      </ul>
+    </section>
+  </div>
+</body>
+</html>

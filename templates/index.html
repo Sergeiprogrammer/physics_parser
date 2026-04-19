@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Analyzer</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 90px 30px 30px;
+            color: #222;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .top-menu {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            padding: 10px 16px;
+            border-radius: 12px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.15);
+            z-index: 10001;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .top-menu a {
+            text-decoration: none;
+            color: #2563eb;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 8px;
+        }
+
+        .top-menu a:hover {
+            background: #eff6ff;
+        }
+
+        .top-menu a.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .upload-box {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+            margin-bottom: 24px;
+        }
+
+        h1, h2, h3, h4 {
+            margin-top: 0;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .message-box, .zip-info, .file-card {
+            background: white;
+            padding: 16px;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .zip-info {
+            background: #ecfeff;
+            border: 1px solid #a5f3fc;
+            white-space: pre-wrap;
+        }
+
+        .file-card {
+            padding: 18px;
+        }
+
+        .file-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 14px;
+        }
+
+        .section {
+            margin-top: 14px;
+            padding: 12px;
+            border-radius: 10px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+        }
+
+        .nested-box {
+            margin-top: 8px;
+            padding: 10px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+        }
+
+        .toggle-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 10px 14px;
+            border-radius: 12px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.15);
+            z-index: 10000;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .toggle-label {
+            font-size: 14px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .toggle-label input {
+            margin-right: 6px;
+        }
+
+        .menu-wrapper {
+            position: relative;
+        }
+
+        .menu-panel {
+            display: none;
+            position: absolute;
+            top: 42px;
+            right: 0;
+            width: 220px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+            padding: 10px;
+            z-index: 10002;
+        }
+
+        .menu-panel.show {
+            display: block;
+        }
+
+        .menu-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .menu-btn {
+            width: 100%;
+            text-align: left;
+            margin-bottom: 6px;
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+        .menu-btn:hover {
+            background: #e5e7eb;
+        }
+
+        .details-block {
+            display: block;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin: 0;
+        }
+
+        @media (max-width: 700px) {
+            body {
+                padding: 140px 16px 20px;
+            }
+
+            .top-menu {
+                left: 12px;
+                top: 12px;
+                right: 12px;
+                width: auto;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .toggle-container {
+                top: 70px;
+                right: 12px;
+                left: 12px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-menu">
+    <a href="/" class="active">Analyzer</a>
+    <a href="/help">Score Guide</a>
+</div>
+
+<div class="toggle-container">
+    <label class="toggle-label">
+        <input type="checkbox" id="toggleCheckbox" onchange="toggleDetails()">
+        Hide event data
+    </label>
+
+    <div class="menu-wrapper">
+        <button type="button" onclick="toggleMenu()">Menu</button>
+        <div class="menu-panel" id="menuPanel">
+            <div class="menu-title">Sort cards</div>
+            <button type="button" class="menu-btn" onclick="sortCards('file')">By file name</button>
+            <button type="button" class="menu-btn" onclick="sortCards('anomaly')">Most anomalous</button>
+            <button type="button" class="menu-btn" onclick="sortCards('manual')">Highest manual score</button>
+            <button type="button" class="menu-btn" onclick="sortCards('contrast')">Highest contrast score</button>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="upload-box">
+        <h2>Upload file</h2>
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" name="file" required>
+            <br><br>
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+
+    {% if message %}
+        <div class="message-box">
+            <pre>{{ message }}</pre>
+        </div>
+    {% endif %}
+
+    {% if zip_message %}
+        <div class="zip-info">{{ zip_message }}</div>
+    {% endif %}
+
+    {% if results %}
+        <h3>Analysis results</h3>
+
+        <div id="resultsContainer">
+        {% for res in results %}
+            <div class="file-card"
+                 data-file="{{ res.file if res.file else '' }}"
+                 data-anomaly="{{ res.anomaly.anomaly_score if res.anomaly and 'anomaly_score' in res.anomaly else 0 }}"
+                 data-manual="{{ res.manual.manual_score if res.manual and 'manual_score' in res.manual else 0 }}"
+                 data-contrast="{{ res.contrast.contrast_score if res.contrast and 'contrast_score' in res.contrast else 0 }}">
+
+                <div class="file-title">{{ res.file }}</div>
+
+                {% if res.error %}
+                    <div class="section">
+                        <b>Error:</b> {{ res.error }}
+                    </div>
+                {% else %}
+                    <div class="section details-block">
+                        <h4>Event data</h4>
+                        {% for key, value in res.event_data.items() %}
+                            <div><b>{{ key }}</b></div>
+                            {% if value is mapping %}
+                                <div class="nested-box">
+                                    {% for subkey, subvalue in value.items() %}
+                                        <div><b>{{ subkey }}</b>: {{ subvalue }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div>{{ value }}</div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    <div class="section">
+                        <h4>Anomaly coefficients</h4>
+                        {% for key, value in res.anomaly.items() %}
+                            <div><b>{{ key }}</b>: {{ value }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="section">
+                        <h4>Manual coefficients</h4>
+                        {% for key, value in res.manual.items() %}
+                            <div><b>{{ key }}</b>: {{ value }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="section">
+                        <h4>Contrast coefficients</h4>
+                        {% for key, value in res.contrast.items() %}
+                            <div><b>{{ key }}</b>: {{ value }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<script>
+function toggleDetails() {
+    const checkbox = document.getElementById("toggleCheckbox");
+    const blocks = document.querySelectorAll(".details-block");
+
+    blocks.forEach(el => {
+        el.style.display = checkbox.checked ? "none" : "block";
+    });
+}
+
+function toggleMenu() {
+    const panel = document.getElementById("menuPanel");
+    panel.classList.toggle("show");
+}
+
+function sortCards(mode) {
+    const container = document.getElementById("resultsContainer");
+    if (!container) return;
+
+    const cards = Array.from(container.querySelectorAll(".file-card"));
+
+    cards.sort((a, b) => {
+        if (mode === "file") {
+            return (a.dataset.file || "").localeCompare(b.dataset.file || "");
+        }
+
+        if (mode === "anomaly") {
+            return parseFloat(b.dataset.anomaly || "0") - parseFloat(a.dataset.anomaly || "0");
+        }
+
+        if (mode === "manual") {
+            return parseFloat(b.dataset.manual || "0") - parseFloat(a.dataset.manual || "0");
+        }
+
+        if (mode === "contrast") {
+            return parseFloat(b.dataset.contrast || "0") - parseFloat(a.dataset.contrast || "0");
+        }
+
+        return 0;
+    });
+
+    cards.forEach(card => container.appendChild(card));
+    document.getElementById("menuPanel").classList.remove("show");
+}
+
+document.addEventListener("click", function(event) {
+    const menu = document.getElementById("menuPanel");
+    const wrapper = document.querySelector(".menu-wrapper");
+
+    if (wrapper && !wrapper.contains(event.target)) {
+        menu.classList.remove("show");
+    }
+});
+</script>
+
+</body>
+</html>
