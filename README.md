@@ -22,9 +22,6 @@ Local tool for analyzing ATLAS XML events.
 pip install -r requirements.txt
 python flask_app.py
 
-Open:
-http://127.0.0.1:5000
-
 Build EXE
 pyinstaller --noconsole --add-data "templates;templates" flask_app.py
 Security
@@ -33,3 +30,9 @@ This app runs locally and does not send data anywhere.
 
 
 ---
+
+## How acces site
+open url http://127.0.0.1:5000
+
+## Easy install
+just install exe from releases
