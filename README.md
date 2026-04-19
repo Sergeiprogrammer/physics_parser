@@ -2,17 +2,31 @@
 
 Local tool for analyzing ATLAS XML events.
 
-# what it does?
-**its analyze xml data from Paricles acelerator ATLAS (part of CERN) write data and measure how intresting it on deferent levels  
-basicly you can fast navigate and a lot of events sort it look at their data and then analyze thme more precise**
+---
 
-## Features
+# What does it do?
 
-- ZIP and XML support
-- anomaly score
-- manual score
-- contrast score
-- web interface (Flask)
+This tool analyzes XML data from the ATLAS particle detector (CERN).
+
+It processes event data and evaluates how interesting each event is using different scoring methods.
+
+You can quickly:
+- browse large numbers of events
+- sort them by different scores
+- inspect their data
+- select interesting candidates for deeper analysis
+
+---
+
+# Features
+
+- ZIP and XML support  
+- Anomaly Score  
+- Manual Score  
+- Contrast Score  
+- Web interface (Flask)  
+
+---
 
 # Score Guide
 
@@ -21,146 +35,148 @@ basicly you can fast navigate and a lot of events sort it look at their data and
 ### 🔴 Anomaly Score  
 **How unusual is the event?**
 
-Anomaly Score measures how far an event stands out from more typical events.  
-It rewards extreme or rare-looking values.
+Measures how much an event stands out from typical data.  
+Rewards extreme or rare values.
 
 ---
 
 ### 🟢 Manual Score  
 **How clean and plausible is the event?**
 
-Manual Score imitates a more human-style evaluation.  
-It prefers events that look physically cleaner and more reasonable.
+Simulates a human-style evaluation.  
+Prefers physically clean and well-structured events.
 
 ---
 
 ### 🔵 Contrast Score  
 **How interesting is the event?**
 
-Contrast Score looks for events with a strong signal but not too much clutter.  
-It is especially useful for finding compact yet striking events.
+Finds events with strong signals but low noise.  
+Useful for spotting compact and interesting events.
 
 ---
 
-# 🔴 1. Anomaly Score
+## 🔴 1. Anomaly Score
 
-**Main idea:** detect events with extreme or unusual values.
+**Main idea:** detect unusual or extreme events.
 
 ### What it uses
 
-- Very low or very high number of tracks  
-- Very high maximum track transverse momentum (`max_track_pt`)  
-- Very high total track transverse momentum (`sum_track_pt`)  
-- High missing transverse energy (MET, stored as `etmis`)  
-- Strong leading jet energy and a high number of jets  
+- Track count extremes  
+- High `max_track_pt`  
+- High `sum_track_pt`  
+- High MET (`etmis`)  
+- Strong jets  
 
-### How to interpret it
+### Interpretation
 
-A higher **Anomaly Score** means the event is more extreme and more likely to stand out.  
-It does **not** automatically mean the event is clean or physically convincing.  
-It simply means it looks unusual.
+Higher score → more unusual event  
+(Not necessarily physically clean)
 
 ---
 
-# 🟢 2. Manual Score
+## 🟢 2. Manual Score
 
-**Main idea:** imitate a hand-tuned, human-style quality check.
+**Main idea:** human-like quality evaluation
 
 ### What it uses
 
-- Track count  
-- Presence of both positive and negative tracks  
-- Charge balance between positive and negative tracks  
-- Maximum track momentum and total track momentum  
-- Primary vertex position and vertex track ratio  
-- MET level  
-- Jet count and leading jet energy  
+- Track balance (+ / −)  
+- Charge symmetry  
+- Vertex quality  
+- MET  
+- Jets  
 
-### How to interpret it
+### Interpretation
 
-A higher **Manual Score** usually means the event looks cleaner, more balanced,  
-and more physically reasonable according to the rule-based logic.
-
-This score is useful when you want events that are easier to inspect  
-and less likely to be pure noise.
+Higher score → cleaner and more realistic event  
 
 ---
 
-# 🔵 3. Contrast Score
+## 🔵 3. Contrast Score
 
-**Main idea:** find events with strong signal features but not too much activity around them.
+**Main idea:** strong signal with minimal noise
 
-### Core formula
+### Formula
 
+```
 
 contrast_score = scarcity × signal_strength × 10 − noise_penalty
 
+````
 
-### Its parts
+### Components
 
 - **Scarcity:** fewer tracks → higher value  
-- **Signal strength:** based on MET, leading jet energy, and max track momentum  
-- **Noise penalty:** subtracts points for:
-  - too many tracks  
-  - too many jets  
-  - too much total activity  
+- **Signal:** MET + jets + track energy  
+- **Noise penalty:** too many tracks/jets  
 
-### How to interpret it
+### Interpretation
 
-A higher **Contrast Score** means the event is compact but still contains a noticeable signal.  
-In practice, this often makes it one of the most useful scores for browsing and ranking interesting events.
+Higher score → compact and interesting event  
 
 ---
 
-# 📊 How to use the scores together
+## 📊 How to use scores
 
-| Goal | Best score to check first | Why |
-|------|--------------------------|-----|
-| Find rare or extreme events | **Anomaly Score** | Highlights strong deviations and outliers |
-| Find clean and physically reasonable events | **Manual Score** | Prefers balance and cleaner structure |
-| Find interesting candidates quickly | **Contrast Score** | Focuses on strong signal with low noise |
+| Goal | Best score | Why |
+|------|-----------|-----|
+| Find unusual events | Anomaly | Detects outliers |
+| Find clean events | Manual | Physically reasonable |
+| Find best candidates | Contrast | Strong signal, low noise |
 
 👉 Recommended workflow:  
-Sort by **Contrast Score** first, then inspect **Anomaly Score** and **Manual Score**.
+Sort by **Contrast Score**, then inspect others.
 
 ---
 
-# 🧠 Short summary
+## 🧠 Summary
 
-- **Anomaly Score** → how much the event stands out  
-- **Manual Score** → how clean and plausible the event looks  
-- **Contrast Score** → how interesting the event is for inspection 
+- Anomaly → unusual  
+- Manual → clean  
+- Contrast → interesting  
 
+---
 
 ## Run from source
 
 ```bash
 pip install -r requirements.txt
 python flask_app.py
+````
 
-Build EXE
-pyinstaller --noconsole --add-data "templates;templates" flask_app.py
-Security
-
-This app runs locally and does not send data anywhere.
-
+Open:
+[http://127.0.0.1:5000](http://127.0.0.1:5000)
 
 ---
+
+## Build EXE
+
+```bash
+pyinstaller --noconsole --add-data "templates;templates" flask_app.py
 ```
 
-## How acces site
-open url http://127.0.0.1:5000
+---
 
-##Easy install
+## Easy install
 
-Download the executable from Releases:
+Download from Releases:
 
-👉 https://github.com/Sergeiprogrammer/physics_parser/releases/tag/v1.0
+👉 [https://github.com/Sergeiprogrammer/physics_parser/releases/tag/v1.0](https://github.com/Sergeiprogrammer/physics_parser/releases/tag/v1.0)
 
-Run analyzer.exe and the browser will open automatically.
+Run `analyzer.exe` — browser will open automatically.
+
+---
+
+## Security
+
+* Runs locally
+* No internet connection required
+* Source code is open
+
+---
 
 ## How it works
 
-- Python core processes data
-- Flask provides local UI
-- No data is sent to the internet
+* Python core processes data
+* Flask provides UI
