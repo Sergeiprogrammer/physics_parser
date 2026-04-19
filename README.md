@@ -33,10 +33,3 @@ This app runs locally and does not send data anywhere.
 
 
 ---
-
-# 📸 5. Добавь скриншоты
-
-Сделай папку:
-
-```text
-screenshots/
