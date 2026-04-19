@@ -18,6 +18,18 @@ You can quickly:
 
 ---
 
+# Use case
+
+This tool helps you quickly identify interesting events.
+
+Typical workflow:
+1. Analyze a dataset using this tool  
+2. Sort events by score (e.g. Contrast Score)  
+3. Select the most interesting events  
+4. Use other software for detailed visualization and analysis  
+
+---
+
 # Features
 
 - ZIP and XML support  
@@ -178,12 +190,25 @@ Run `analyzer.exe` — browser will open automatically.
 
 ## How it works
 
-* Python core processes data
-* Flask provides UI
+- Python core processes the data  
+- Flask provides the web interface  
 
-## Where i can get datasets
-here
-👉 [https://github.com/Sergeiprogrammer/physics_parser/releases/tag/v1.0](https://opendata.cern/search?q=&f=type%3ADataset&f=experiment%3AATLAS&l=list&order=desc&p=1&s=10&sort=mostrecent)
+---
 
-## use case
-you find intresting event by programm and then use some other software for visualization
+## Where to get datasets
+
+You can find example datasets here:
+
+👉 https://opendata.cern/search?q=&f=type%3ADataset&f=experiment%3AATLAS&l=list&order=desc&p=1&s=10&sort=mostrecent
+
+---
+
+---
+
+## Where to get software
+
+You can find software:
+
+👉 https://atlas.cern/Resources/Event-Analysis-Tools
+
+---
