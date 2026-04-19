@@ -180,3 +180,10 @@ Run `analyzer.exe` — browser will open automatically.
 
 * Python core processes data
 * Flask provides UI
+
+## Where i can get datasets
+here
+👉 [https://github.com/Sergeiprogrammer/physics_parser/releases/tag/v1.0](https://opendata.cern/search?q=&f=type%3ADataset&f=experiment%3AATLAS&l=list&order=desc&p=1&s=10&sort=mostrecent)
+
+## use case
+you find intresting event by programm and then use some other software for visualization
